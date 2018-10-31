@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2048
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuplicateCodeDetector", "DuplicateCodeDetector.csproj", "{3156A622-E72D-4974-A6FB-F7E679B82ACC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3156A622-E72D-4974-A6FB-F7E679B82ACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3156A622-E72D-4974-A6FB-F7E679B82ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3156A622-E72D-4974-A6FB-F7E679B82ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3156A622-E72D-4974-A6FB-F7E679B82ACC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {617E87BF-E065-484D-A6D2-0FD0004C3E34}
+	EndGlobalSection
+EndGlobal

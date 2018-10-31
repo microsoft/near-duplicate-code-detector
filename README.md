@@ -1,3 +1,28 @@
+Near-Duplicate Code Detector
+===
+
+This cross-platform sample tool detects exact and near duplicates of code maintained by MSRC. It has been created for the purpose of deduplicating code corpora for research purposes.
+
+*Requirements*: .NET Core 2.1 or higher. For parsing code, an appropriate runtime for each of the languages that needs to be tokenized is also required.
+
+To run the near-duplicate detection run:
+```
+dotnet run /path/to/DuplicateCodeDetector.csproj detect path/to/dataFolder outputFile
+```
+This will use all the `.jsonl.gz` files in the `dataFolder` and output an `outputFile` with the duplicate pairs and an `outputFile.json` with the groups of detected duplicates.
+
+### Input Data
+
+The input data should be one or more `.jsonl.gz` files. These are compressed files where each line has a single JSON entry of the form
+```
+{
+    "filename": "unique identifier of file, such as a path or a unique id",
+    "tokens" : ["list", "of", "tokens", "in", "file"]
+}
+```
+
+The `tokenizers` folder in this repository contains tokenizers for 
+C\#, Java, JavaScript and Python. Feel free to contribute tokenizers for other languages too.
 
 # Contributing
 
