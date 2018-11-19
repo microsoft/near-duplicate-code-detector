@@ -1,7 +1,9 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -13,15 +15,19 @@ namespace NearCloneDetector
 {
     class CloneDetector
     {
-        public struct TokenData
-        {
-            public string filename;
-            public string[] tokens;
-        }
-
         private readonly Dictionary<string, Dictionary<string, SparseVector>> _index = new Dictionary<string, Dictionary<string, SparseVector>>();
         public int NumFiles => _index.Sum(prj => prj.Value.Count);
         private readonly FeatureDictionary _dict = new FeatureDictionary();
+
+        private readonly string _tokensFieldName;
+        private readonly string[] _identifyingFields;
+
+        public CloneDetector(string tokensField, string[] entryIdFields)
+        {
+            _tokensFieldName = tokensField;
+            Debug.Assert(entryIdFields.Length > 0);
+            _identifyingFields = entryIdFields;
+        }
 
         public readonly Dictionary<string, HashSet<string>> Duplicates = new Dictionary<string, HashSet<string>>();
 
@@ -52,11 +58,17 @@ namespace NearCloneDetector
 
         public void BuildIndexForProjects(string tokenizedFilesPath)
         {
-            var allFiles = Directory.GetFiles(tokenizedFilesPath, "*.jsonl.gz");
+            var allFiles = Directory.GetFiles(tokenizedFilesPath, "*.gz")
+                .Select(f=> Path.Combine(tokenizedFilesPath, f));
+            BuildIndexFromFiles(allFiles);
+        }
+
+        public void BuildIndexFromFiles(IEnumerable<string> allFiles)
+        {
             foreach (var projectDir in allFiles)
             {
                 Console.WriteLine($"Indexing project {projectDir}");
-                BuildIndexForProject(Path.Combine(tokenizedFilesPath, projectDir));
+                BuildIndexForProject(projectDir);
             }
         }
 
@@ -77,14 +89,15 @@ namespace NearCloneDetector
                         line = text.ReadLine();
                         continue;
                     }
-                    var tokenData = JsonConvert.DeserializeObject<TokenData>(line);
-                    var tokenCounter = Count(tokenData.tokens);
+                    var tokenData = JsonConvert.DeserializeObject<IDictionary<string, object>>(line);
+                    var tokenCounter = Count(((JArray)tokenData[_tokensFieldName]).Select(t=>t.ToString()));
 
                     if (tokenCounter.Sum(tc => tc.Count) >= MIN_NUM_TOKENS_FOR_FILE)
                     {
                         var spVect = new SparseVector();
                         spVect.AddElements(tokenCounter.Select(tc => (_dict.AddOrGet(tc.Token), tc.Count)));
-                        projectIndex[tokenData.filename] = spVect;
+                        var entryIdentifier = string.Join(":", _identifyingFields.Select(idf => tokenData[idf].ToString()));
+                        projectIndex[entryIdentifier] = spVect;
                     }
                     line = text.ReadLine();
                 }

@@ -6,9 +6,9 @@ This cross-platform sample tool detects exact and near duplicates of code mainta
 
 To run the near-duplicate detection run:
 ```
-$ dotnet run /path/to/DuplicateCodeDetector.csproj detect path/to/dataFolder outputFile
+$ dotnet run /path/to/DuplicateCodeDetector.csproj [options] --dir=<folder> <output-file-prefix>
 ```
-This will use all the `.jsonl.gz` files in the `dataFolder` and output an `outputFile` with the duplicate pairs and an `outputFile.json` with the groups of detected duplicates.
+This will use all the `.gz` files in the `<folder>` and output an `<output-file-prefix>.json` with the groups of detected duplicates. Invoke `--help` for more options.
 
 ### Input Data
 
@@ -19,6 +19,7 @@ The input data should be one or more `.jsonl.gz` files. These are compressed [JS
     "tokens" : ["list", "of", "tokens", "in", "file"]
 }
 ```
+Alternative formats can be accepted by providing the `--tokens-field` and `--id-fields` options.
 
 The `tokenizers` folder in this repository contains tokenizers for 
 C\#, Java, JavaScript and Python. Please, feel free to contribute tokenizers for other languages too.
