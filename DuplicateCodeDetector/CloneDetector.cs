@@ -58,8 +58,7 @@ namespace NearCloneDetector
 
         public void BuildIndexForProjects(string tokenizedFilesPath)
         {
-            var allFiles = Directory.GetFiles(tokenizedFilesPath, "*.gz")
-                .Select(f=> Path.Combine(tokenizedFilesPath, f));
+            var allFiles = Directory.GetFiles(tokenizedFilesPath, "*.gz");
             BuildIndexFromFiles(allFiles);
         }
 
