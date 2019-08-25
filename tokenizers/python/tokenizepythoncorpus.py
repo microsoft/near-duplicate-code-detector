@@ -5,7 +5,7 @@ Usage:
    tokenizepythoncorpus.py [options] PROJECTS_FOLDER OUTPUT_FOLDER
 
 Options:
-    --only-ids    Return only identifiers
+    --all-tokens  Return only identifiers
     -h --help     Show this screen.
 
 """
@@ -22,12 +22,12 @@ from docopt import docopt
 
 from dpu_utils.utils import save_jsonl_gz
 
-def tokenize_file(filepath: str, only_ids: bool=False)-> Iterator[str]:
+def tokenize_file(filepath: str, all_tokens: bool=False)-> Iterator[str]:
     tokens = []
     try:
         with open(filepath, 'rb') as f:
             for toknum, tokval, _, _, _ in tokenize(f.readline):
-                if not only_ids or toknum in {NAME, STRING}:
+                if all_tokens or toknum in {NAME, STRING}:
                     if not keyword.iskeyword(tokval):
                         tokens.append(tokval)
     except Exception as e:
@@ -54,5 +54,5 @@ def tokenize_all_project_folders(directory: str, output_folder: str, only_ids: b
 
 if __name__ == '__main__':
     args = docopt(__doc__)
-    tokenize_all_project_folders(args['PROJECTS_FOLDER'], args['OUTPUT_FOLDER'], args['--only-ids'])
+    tokenize_all_project_folders(args['PROJECTS_FOLDER'], args['OUTPUT_FOLDER'], args['--all-tokens'])
 
