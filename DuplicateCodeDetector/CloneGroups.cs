@@ -36,19 +36,26 @@ namespace NearCloneDetector
 
             var duplicationFactors = CloneSets.Select(c => c.Count).ToList();
 
-            Console.WriteLine($"Avg Duplication Factor: {duplicationFactors.Average()}");
-            duplicationFactors.Sort();
-            double median;
-            int midpoint = duplicationFactors.Count / 2;
-            if (duplicationFactors.Count % 2 == 0)
+            if (duplicationFactors.Count > 0)
             {
-                median = (duplicationFactors[midpoint] + duplicationFactors[midpoint + 1]) / 2;
+                Console.WriteLine($"Avg Duplication Factor: {duplicationFactors.Average()}");
+                duplicationFactors.Sort();
+                double median;
+                int midpoint = duplicationFactors.Count / 2;
+                if (duplicationFactors.Count % 2 == 0)
+                {
+                    median = (duplicationFactors[midpoint] + duplicationFactors[midpoint + 1]) / 2;
+                }
+                else
+                {
+                    median = duplicationFactors[midpoint];
+                }
+                Console.WriteLine($"Median Duplication Factor: {median}");
             }
             else
             {
-                median = duplicationFactors[midpoint];
+                Console.WriteLine("No duplicates found.");
             }
-            Console.WriteLine($"Median Duplication Factor: {median}");
         }
 
         private int MakeCloneSetTransitive()
