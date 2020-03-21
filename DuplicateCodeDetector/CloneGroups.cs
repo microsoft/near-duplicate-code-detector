@@ -41,7 +41,7 @@ namespace NearCloneDetector
                 Console.WriteLine($"Avg Duplication Factor: {duplicationFactors.Average()}");
                 duplicationFactors.Sort();
                 double median;
-                int midpoint = duplicationFactors.Count / 2;
+                int midpoint = duplicationFactors.Count > 2 ? duplicationFactors.Count / 2 : 0;
                 if (duplicationFactors.Count % 2 == 0)
                 {
                     median = (duplicationFactors[midpoint] + duplicationFactors[midpoint + 1]) / 2;
