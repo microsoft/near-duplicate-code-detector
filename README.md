@@ -22,7 +22,7 @@ The input data should be one or more `.jsonl.gz` files. These are compressed [JS
 Alternative formats can be accepted by providing the `--tokens-field` and `--id-fields` options.
 
 The `tokenizers` folder in this repository contains tokenizers for 
-C\#, Java, JavaScript and Python. Please, feel free to contribute tokenizers for other languages too.
+C\#,F\#, Java, JavaScript and Python. Please, feel free to contribute tokenizers for other languages too.
 
 # Contributing
 
