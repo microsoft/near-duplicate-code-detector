@@ -54,22 +54,40 @@ function extractForFolder(dir, identifiersOnly, outpath, baseDir) {
     fs.writeFileSync(outpath, zlib.gzipSync(gzipped));
 }
 
-// For each project (folder in folder)
-var base_dir = '/mnt/c/Users/t-mialla/Downloads/data';
-var all_user_folders = fs.readdirSync(base_dir);
-for (var i in all_user_folders) {
-    var user_folder = path.join(base_dir, all_user_folders[i]);
-    if (!fs.lstatSync(user_folder).isDirectory()) {
-        continue;
-    }
-    all_project_folders = fs.readdirSync(user_folder);
-    for (var j in all_project_folders) {        
-        var project_folder = path.join(user_folder, all_project_folders[j]);        
-        if (!fs.statSync(project_folder).isDirectory()) continue;
-
-        console.log('Extracting '+ project_folder)
-
-        var outpath = path.join('/mnt/c/Users/t-mialla/Downloads/parsedJs', all_user_folders[i] + "__" + all_project_folders[j] + '.jsonl.gz'); // TODO
-        extractForFolder(project_folder, false, outpath, base_dir);
-    }
+if (process.argv.length != 4) {
+    console.error(`Usage: ${process.argv[0]} PROJECTS_FOLDER OUTPUT_FOLDER`);
+    process.exit(1);
 }
+
+const base_dir = process.argv[2];
+if(!fs.existsSync(base_dir)) {
+    console.error(`Error: Directory "${base_dir}" does not exist.`);
+    process.exit(1);
+}
+if(!fs.lstatSync(base_dir).isDirectory()) {
+    console.error(`Error: "${base_dir}" is not a directory.`);
+    process.exit(1);
+}
+
+const output_dir = process.argv[3];
+if(fs.existsSync(output_dir) && !fs.lstatSync(output_dir).isDirectory()) {
+    console.error(`Error: "${output_dir}" is not a directory.`);
+    process.exit(1);
+}
+
+if(!fs.existsSync(output_dir)) {
+    fs.mkdirSync(output_dir);
+}
+
+fs.readdirSync(base_dir).forEach(project_name => {
+    const project_dir = path.join(base_dir, project_name);
+    if (!fs.lstatSync(project_dir).isDirectory()) {
+        return;
+    }
+
+    console.log(`Extracting ${project_dir}`);
+    
+    const project_output_file = path.join(output_dir, project_name + ".json.gz");
+    extractForFolder(project_dir, false, project_output_file, base_dir);
+});
+
