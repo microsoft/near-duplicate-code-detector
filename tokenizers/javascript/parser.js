@@ -55,7 +55,7 @@ function extractForFolder(dir, identifiersOnly, outpath, baseDir) {
 }
 
 if (process.argv.length != 4) {
-    console.error(`Usage: ${process.argv[0]} PROJECTS_FOLDER OUTPUT_FOLDER`);
+    console.error(`Usage: ${process.argv[0]} ${process.argv[1]} PROJECTS_FOLDER OUTPUT_FOLDER`);
     process.exit(1);
 }
 
